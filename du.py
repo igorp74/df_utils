@@ -514,8 +514,13 @@ def clean_df(df):
     # Remove empty rows and columns
     res =  df.dropna(how='all', axis=0)
     res = res.dropna(how='all', axis=1)
+
     # Strip leading and trailing spaces in column names
     res.columns = res.columns.str.strip()
+    # Ensure unique column names
+    res.columns = [x[1] if x[1] not in res.columns[:x[0]] else f"{x[1]}_{list(res.columns[:x[0]]).count(x[1])}" for x in enumerate(res.columns)]
+
+    # Fill empty cells with nan
     res = res.fillna(value=np.nan)
     # Strip leading and trailing spaces in all columns
     res = res.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
@@ -523,5 +528,6 @@ def clean_df(df):
     res = res.drop_duplicates()
     # Reindex
     res.reset_index(drop=True, inplace=True)
+
     return res
 
