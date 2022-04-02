@@ -1,5 +1,13 @@
 # df_utils
-Set of pandas DataFrame functions which I use a lot in ETL data processing.
+Set of Data Engineering functions which I use a lot in ETL data processing.
+I separate them in 3 different files: 
+* **db** - for database connectors
+* **du** - as dataframe utils
+* **fi** - as file and list helpers
+
+It all started with print(df).. then print(df.values.tolist).. then prettify with tabulate...
+After some time and work, I noticed which parts of code I use the most and in every script, thus I made functions.
+Fast forward.. after some amount of functions this is a logical step to Python module on PyPI (soon).
 
 I use them as a local module
 
