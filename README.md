@@ -37,4 +37,5 @@ du.print_df(res, vt=3)
 
 
 ### Result:
+Notice that first dataframe is printed as is, without cleaning, then for comparison, there is another print with cleaned dataframe.
 ![screenshot_20220402-112908](https://user-images.githubusercontent.com/17882375/161377122-f00161f0-8ab7-4a45-b561-90675d815760.png)
