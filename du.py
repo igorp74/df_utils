@@ -510,24 +510,24 @@ def df_unique(df, col, id=0):
         res['ID'] = res.index
     return res
 
-def clean_df(df):
+def clean_df(res, fillna=''):
     # Remove empty rows and columns
-    res =  df.dropna(how='all', axis=0)
-    res = res.dropna(how='all', axis=1)
+    res.dropna(how='all', axis=0, inplace=True)
+    res.dropna(how='all', axis=1, inplace=True)
 
     # Strip leading and trailing spaces in column names
     res.columns = res.columns.str.strip()
     # Ensure unique column names
     res.columns = [x[1] if x[1] not in res.columns[:x[0]] else f"{x[1]}_{list(res.columns[:x[0]]).count(x[1])}" for x in enumerate(res.columns)]
 
-    # Fill empty cells with nan
-    res = res.fillna(value=np.nan)
     # Strip leading and trailing spaces in all columns
     res = res.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
+    # Fillna
+    if len(fillna):
+        res.fillna(fillna,inplace=True)
     # Remove duplicates
     res = res.drop_duplicates()
     # Reindex
     res.reset_index(drop=True, inplace=True)
 
     return res
-
