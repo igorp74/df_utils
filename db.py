@@ -214,7 +214,7 @@ def postgresql(hostname, database, **kwargs):
 
     try:
         if mode == 'conn':
-            # Definiranje spoja na bazu
+            #  Define database connection
             conn = pg.connect(f'host={hostname} dbname={database} user={username} password={password}')
             # Checking database connection
             #-----------------------------------------------------
