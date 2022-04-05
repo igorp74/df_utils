@@ -41,8 +41,9 @@ du.print_df(res, vt=3)
 ```
 
 ### Source data:
-file:///home/igorp/Pictures/Screenshots/screenshot_20220405-231144.png
+![screenshot_20220405-231144](https://user-images.githubusercontent.com/17882375/161851292-3b150ef1-f5bd-4777-83e5-7d0e0aed2146.png)
 
 ### Result:
 Notice that first dataframe is printed as is, without cleaning, then for comparison, there is another print with cleaned dataframe.
-file:///home/igorp/Pictures/Screenshots/screenshot_20220405-231858.png
+
+![screenshot_20220405-231858](https://user-images.githubusercontent.com/17882375/161851313-5fb66668-13f5-4cdd-b1e3-09da510b76d6.png)
