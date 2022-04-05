@@ -36,7 +36,7 @@ df = du.get_xlsx_data(fn, 'Milka')
 du.print_df(df, vt=2, e=0)
 
 # print cleaned DataFrame
-res = du.clean_df(df, fillna='///')
+res = du.clean_df(df)
 du.print_df(res, vt=3)
 ```
 
