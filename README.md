@@ -14,7 +14,7 @@ from df_utils import db, du, fi
 ```
 
 I separate them in 3 different files: 
-* ### **db** - for database connectors
+* ### **db** - for database connectors [wiki](https://github.com/igorp74/df_utils/wiki#db---for-database-connectors)
   * ***mssqlsrv***(sqlserver, database, **kwargs)
   * ***oracle***(hostname, database, **kwargs)
   * ***postgresql***(hostname, database, **kwargs)
