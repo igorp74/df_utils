@@ -249,3 +249,10 @@ def postgresql(hostname, database, **kwargs):
     except Exception as ex:
         print('----------------------------------------------------------------')
         print('❌ DB Connection ERROR ❌\n  ',ex)
+
+def exec_query(conn, query_list):
+    c = conn.cursor()
+    for q in query_list:
+        c.execute(q)
+        conn.commit()
+    c.close()
