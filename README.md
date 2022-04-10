@@ -47,7 +47,7 @@ I separate them in 3 different files:
   * ***split_by_size***(path, file_list, size)
   * ***cp_multi_2_one***(file_list, dst_path)
 
-### Example 1 - Read xlsx
+### 💡 Example 1 - Read xlsx
 Let say I want to read an xlsx (MS Excel) file and print the content of a worksheet.
 
 ```python
@@ -78,7 +78,7 @@ Notice that first dataframe is printed as is, without cleaning, then for compari
 
 ![screenshot_20220405-231858](https://user-images.githubusercontent.com/17882375/161851313-5fb66668-13f5-4cdd-b1e3-09da510b76d6.png)
 
-### Example 2 - Connect to databases
+### 💡 Example 2 - Connect to databases
 In this example, I am going to connect on 2 databases; one local and one remote (Heroku).
 I will query and collect some data from tables in the both databases and left join them together for final result.
 
