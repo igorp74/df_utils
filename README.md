@@ -78,9 +78,79 @@ Notice that first dataframe is printed as is, without cleaning, then for compari
 
 ![screenshot_20220405-231858](https://user-images.githubusercontent.com/17882375/161851313-5fb66668-13f5-4cdd-b1e3-09da510b76d6.png)
 
-### Example 2 - Connect do databases
+### Example 2 - Connect to databases
 In this example, I am going to connect on 2 databases; one local and one remote (Heroku).
 I will query and collect some data from tables in the both databases and left join them together for final result.
 
 ![screenshot_20220410-131902](https://user-images.githubusercontent.com/17882375/162615872-71bcdf4f-6fa9-4a4d-86de-e911a1cbf9cd.png)
 
+### Code analysis
+
+```python
+# 🧰 My toolbox
+import sys
+sys.path.append(r"/home/igorp/Documents/CODE/GitHub")
+from df_utils import db, du, up
+
+import pandas as pd
+from timeit import default_timer as timer
+start = timer()
+
+import sqlite3
+# 🔑 My password vault...
+conn = sqlite3.connect('/home/igorp/Documents/CODE/Vault/secure_box.sqlite')
+```
+Above code is header and declaration of modules I need in this script. Notice that I use SQLite local database for storing my passwords, so they cannot be visible in my scripts (like this one).
+
+```python
+# Local database (PostgreSQL)
+host_name = '127.0.0.1'
+database  = 'data'
+user_name = 'root'
+password  = up.get_password(conn, 1)
+
+# Heroku database (PostgreSQL)
+host_name2 = "ec2-52-208-254-158.eu-west-1.compute.amazonaws.com"
+database2  = "da2g6qll5cjhkd"
+user_name2 = "qkrfbcuatvnhha"
+password2  = up.get_password(conn, 2)
+
+engine = db.postgresql(host_name, database,
+                     a_username = user_name,
+                     a_password = password
+                     )
+
+engine2 = db.postgresql(host_name2, database2,
+                     a_username = user_name2,
+                     a_password = password2
+                     )
+
+ex= ''
+```
+Connection strings to both local and remote database and engine creation for both of them.
+
+```python
+try:
+    df  = pd.read_sql("select id as professorid, first_name, last_name from dbo.professor_csv", con=engine)
+    du.print_df(df, c=0, d=0, vt=2, e=0)
+
+    df2 = pd.read_sql("select * from dbo.course_csv", con=engine2)
+    du.print_df(df2, c=0, d=0, vt=2, e=0)
+except Exception as ex:
+    print(ex)
+```
+Here I am trying to run queries on each database and collect the results into the DataFrames.
+Notice that I turned off columns (c=0), dtypes (d=0) and exit (e=0) 
+in du.print_df(df, c=0, d=0, vt=2, e=0). I only left values tabular (vt=2).
+
+```python
+df_join = pd.merge(df2,df, how='left', on='professorid', indicator=True)
+du.print_df(df_join, c=0, d=0, vt=2, e=0)
+```
+Left join between 2 dataframes. This is equivalent for left joining tables in SQL, as it is usual in pandas DataFrame environment. Indicator is turned ON (True), so I have got additional column in result DataFrame "_merge" with indicator do I have the joined data in **both** tables or just **left_only**
+
+```python
+proc_time = round(timer() - start,2)
+print(f'\n⚡⚡⚡ ⏱ Done in: {proc_time} s ⚡⚡⚡')
+```
+This is processing time counter.
