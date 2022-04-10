@@ -79,8 +79,8 @@ Notice that first dataframe is printed as is, without cleaning, then for compari
 ![screenshot_20220405-231858](https://user-images.githubusercontent.com/17882375/161851313-5fb66668-13f5-4cdd-b1e3-09da510b76d6.png)
 
 ### 💡 Example 2 - Connect to databases
-In this example, I am going to connect on 2 databases; one local and one remote (Heroku).
-I will query and collect some data from tables in the both databases and left join them together for final result.
+In this example, I am going to connect to 2 databases; one local and one remote (Heroku).
+I will query and collect some data from tables in both databases and left join them together to final result.
 
 ![screenshot_20220410-131902](https://user-images.githubusercontent.com/17882375/162615872-71bcdf4f-6fa9-4a4d-86de-e911a1cbf9cd.png)
 
