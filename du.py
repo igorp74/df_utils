@@ -199,11 +199,11 @@ def df_append_2_xlsx(df, file_name, sheet_name):
 
 def df_2_xlsx(df, fn, sn, ac=1, m=0, s=0, sr=0):
     """
-    *#Saves single Dataframe to single Excel xlsx file.*
+    *#Saves Dataframe(s) to worksheet(s) in Excel xlsx file.*
 
     ---
     ### Returns:
-    → Single xlsx file with one worksheet with dataframe data
+    → Single xlsx file with worksheet(s) from dataframe data
 
     ---
     ### Arguments:
@@ -211,7 +211,7 @@ def df_2_xlsx(df, fn, sn, ac=1, m=0, s=0, sr=0):
     - fn  (Path(str))  File Name
     - sn  (str)        Sheet Name
     - ac  (int)        0 = Off,    1 = On    (Auto-resize column)
-    - m   (int)        0 = Single, 1 = Multi
+    - m   (int)        0 = Single, 1 = Multi (if m=1, dataframes and worksheets in arguments need to be in a list form)
     - s   (int)        0 = Header, 1 = Table
 
     """
