@@ -6,7 +6,7 @@
 👔 by Igor Perković
 
 🛠 CREATED: 2020-10-13 08:39:29
-📆 CHANGED: 2022-04-02 00:15:42
+📆 CHANGED: 2022-04-13 17:50:56
 
 ---
 ⚙ PREREQUISITES:
@@ -102,8 +102,6 @@ def get_xlsx(fn, **kwargs):
         # ---------------------------
         # print("%s = %s" % (k, v))
 
-        # Define smtp parameters
-        #------------------------
         if k == 'a_sn_list':
             sn  = v
         if k == 'a_header_rows':
@@ -411,12 +409,7 @@ def print_df(df, **kwargs):
 
     # Get dynamic argument
     for k,v in kwargs.items():
-        # Check all arguments
-        # ---------------------------
-        # print("%s = %s" % (k, v))
 
-        # Define smtp parameters
-        #------------------------
         if k == 'd':
             a_d  = v
         if k == 'dt':
