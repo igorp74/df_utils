@@ -353,12 +353,12 @@ def df_2_xlsx(fn, df, sn, **kwargs):
                             for col_num, value in enumerate(d.columns.values):
                                 ws.write(0, col_num, value, header_format)
 
-                        # Color the tabs
-                        ws.set_tab_color(tagc)
-                        # Freeze 1st row
-                        ws.freeze_panes(1, 0)
-                        # Worksheet zoom level
-                        ws.set_zoom(80)
+                    # Color the tabs
+                    ws.set_tab_color(tagc)
+                    # Freeze 1st row
+                    ws.freeze_panes(1, 0)
+                    # Worksheet zoom level
+                    ws.set_zoom(80)
 
             else:
                 print('List of DataFrames | WorkSheets are not of the same size.')
