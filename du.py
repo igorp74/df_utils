@@ -197,7 +197,7 @@ def df_append_2_xlsx(df, file_name, sheet_name):
     except:
         print(f'❌❌❌ Cannot open or write to file: {file_name}.\nIs it open ?')
 
-def df_2_xlsx(df, fn, sn, ac=1, m=0, s=0, sr=0):
+def df_2_xlsx(fn, df, sn, **kwargs):
     """
     *#Saves Dataframe(s) to worksheet(s) in Excel xlsx file.*
 
@@ -207,14 +207,51 @@ def df_2_xlsx(df, fn, sn, ac=1, m=0, s=0, sr=0):
 
     ---
     ### Arguments:
-    - df  (DataFrame)
-    - fn  (Path(str))  File Name
-    - sn  (str)        Sheet Name
-    - ac  (int)        0 = Off,    1 = On    (Auto-resize column)
-    - m   (int)        0 = Single, 1 = Multi (if m=1, dataframes and worksheets in arguments need to be in a list form)
-    - s   (int)        0 = Header, 1 = Table
-
+    - df             (DataFrame)
+    - fn             (Path(str))  File Name[s]
+    - sn             (str)        Sheet Name[s]
+    - a_tc           (hex color)  tab color
+    - a_tab_colors   (hex color)  list of tab colors for every sheet
+    - a_ac           (int)        0 = Off,    1 = On    (Auto-resize column)
+    - a_style        (int)        0 = Header, 1 = Table
+    - a_table_style  (str)        Name of Excel table style
+    - a_multi        (int)        0 = Single, 1 = Multi (if a_mode=1, dataframes and worksheets in arguments need to be in a list form)
+    - a_properties   (dict)       custom file properties
     """
+
+    #-----------------
+    # Default values
+    #-----------------
+    tc  = '#e6e6e6'
+    if 'list' in str(type(df)):
+        tcl = [tc]*len(df)
+    ac  = 1
+    m   = 0
+    s   = 0
+    ts  = 'Table Style Medium 2'
+    wsp = {
+            'author':   'IgorP',
+            'company':  'Private',
+            'category': 'Report',
+          }
+
+    # Get dynamic argument
+    for k,v in kwargs.items():
+        if k == 'a_tc':
+            tc = v
+        if k == 'a_tab_colors':
+            tcl = v
+        if k == 'a_ac':
+            ac = v
+        if k == 'a_style':
+            s = v
+        if k == 'a_table_style':
+            ts = v
+        if k == 'a_multi':
+            m = v
+        if k == 'a_properties':
+            wsp = v
+
     import xlsxwriter
     import pandas as pd
 
@@ -228,11 +265,7 @@ def df_2_xlsx(df, fn, sn, ac=1, m=0, s=0, sr=0):
     workbook  = writer.book
 
     # Workbook properties
-    workbook.set_properties({
-        'author':   'IgorP',
-        'company':  'Private',
-        'category': 'Report',
-    })
+    workbook.set_properties(wsp)
 
     format_dict = {
         'bold'       : True,
@@ -267,7 +300,7 @@ def df_2_xlsx(df, fn, sn, ac=1, m=0, s=0, sr=0):
                 for c in (df.columns.values):
                     cols.append({'header': c})
 
-                ws.add_table(0, 0, len(df.index), len(df.columns)-1, {'columns': cols, 'style': 'Table Style Medium 2'})
+                ws.add_table(0, 0, len(df.index), len(df.columns)-1, {'columns': cols, 'style': ts})
 
             else:
                 # Header formatting (option instead of Table Style)
@@ -277,11 +310,13 @@ def df_2_xlsx(df, fn, sn, ac=1, m=0, s=0, sr=0):
                 for col_num, value in enumerate(df.columns.values):
                     ws.write(0, col_num, value, header_format)
 
+            # Color the tabs
+            ws.set_tab_color(tc)
             # Freeze 1st row
             ws.freeze_panes(1, 0)
-
             # Worksheet zoom level
             ws.set_zoom(80)
+
         else:
             print('This is not a single dataframe for process.')
             print('Exiting...')
@@ -289,38 +324,44 @@ def df_2_xlsx(df, fn, sn, ac=1, m=0, s=0, sr=0):
     else:
         if 'list' in str(type(df)):
             if len(df) == len(sn):
-                for d,s in zip(df, sn):
-                    d.to_excel(writer, sheet_name=s, index=False)
+                for d,s, tagc in zip(df, sn, tcl):
 
-                    ws = writer.sheets[s]
-                    for i, width in enumerate(get_col_widths(d)):
-                        ws.set_column(i-1, i-1, width+2)
-
-                    if s:
-                        # Table style format
-                        #--------------------
-                        cols = []
-
-                        for c in (d.columns.values):
-                            cols.append({'header': c})
-
-                        ws.add_table(0, 0, len(d.index), len(d.columns)-1, {'columns': cols, 'style': 'Table Style Medium 2'})
-
+                    # Skip empty worksheets
+                    if d.empty:
+                        pass
                     else:
-                        # Header formatting (option instead of Table Style)
-                        # -------------------------------------------------
-                        header_format = workbook.add_format(format_dict)
+                        d.to_excel(writer, sheet_name=s, index=False)
 
-                        for col_num, value in enumerate(d.columns.values):
-                            ws.write(0, col_num, value, header_format)
+                        ws = writer.sheets[s]
+                        for i, width in enumerate(get_col_widths(d)):
+                            ws.set_column(i-1, i-1, width+2)
 
-                    # Freeze 1st row
-                    ws.freeze_panes(1, 0)
+                        if s:
+                            # Table style format
+                            #--------------------
+                            cols = []
+                            for c in (d.columns.values):
+                                cols.append({'header': c})
 
-                    # Worksheet zoom level
-                    ws.set_zoom(80)
+                            ws.add_table(0, 0, len(d.index), len(d.columns)-1, {'columns': cols, 'style': ts})
+
+                        else:
+                            # Header formatting (option instead of Table Style)
+                            # -------------------------------------------------
+                            header_format = workbook.add_format(format_dict)
+
+                            for col_num, value in enumerate(d.columns.values):
+                                ws.write(0, col_num, value, header_format)
+
+                        # Color the tabs
+                        ws.set_tab_color(tagc)
+                        # Freeze 1st row
+                        ws.freeze_panes(1, 0)
+                        # Worksheet zoom level
+                        ws.set_zoom(80)
+
             else:
-                print('List of DataFrames and list of WorkSheets are not of the same size.')
+                print('List of DataFrames | WorkSheets are not of the same size.')
                 print('Exiting...')
                 exit()
         else:
