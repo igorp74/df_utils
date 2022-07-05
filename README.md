@@ -33,6 +33,9 @@ I separate them in 3 different files:
   * ***df_unique***(df, col, id=0)
   * ***clean_df***(res, fillna='')
 * ### **fi** - as file and list helpers
+  * 🔥 ***transpose_list***(list_in, na=None)
+  * 🔥 ***rotate_list***(l, n)
+  * 🔥 ***flatten_list***(in_list)
   * ***remove_sublist***(main_list, unwanted_list)
   * ***check_sublist***(main_list, sub_list, exception=0)
   * ***list_2_pickle***(src_list, fn)
