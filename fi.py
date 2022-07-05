@@ -5,7 +5,7 @@
 👔 by Igor Perković
 
 🛠 CREATED: 2020-10-13 08:39:29
-📆 CHANGED: 2021-12-27 13:42:13
+📆 CHANGED: 2022-07-05 12:45:07
 
 ---
 ⚙ PREREQUISITES:
@@ -13,10 +13,86 @@
 
 """
 
-# Lists
+# List functions
+#--------------------------------------------------
+def transpose_list(list_in, na=None):
+    """
+    *# Transposing a list of list*
+
+    ---
+    ### Returns:
+    → Transposed list
+
+    ---
+    ### Arguments:
+    - list_in  list
+    - na       sunstitute for the empty positions
+    """
+
+    # First I need to find maximum length of all sublists
+    max_len = max(len(s) for s in list_in)
+
+    # then, in every other sublist with less than max items, append empty symbol
+    for i in list_in:
+        if len(i) < max_len:
+            i.append(na)
+
+    # Finally, prepare the result as a transposed list of lists
+    res = [list(i) for i in zip(*list_in)]
+
+    return res
+
+
+def rotate_list(l,n):
+    """
+    *# Rotate list*
+
+    ---
+    ### Returns:
+    → Rotated list
+
+    ---
+    ### Arguments:
+    - l  list
+    - n  number of positions for rotating to the righ
+    """
+
+    return [l[(i + n) % len(l)] for i, x in enumerate(l)]
+
+
+def flatten_list(in_list):
+    """
+    *# Flatten any embedded list*
+
+    ---
+    ### Returns:
+    → Flatten list generator object
+
+    ---
+    ### ATTENTION:
+    - For getting result in another list,
+    need to iterate over generator
+    or print object.
+
+    ---
+    ### EXAMPLE:
+    - res_list = list(flatten(some_list))
+
+    ---
+    ### Arguments:
+    - in_list    list for flattening
+    """
+
+    for x in in_list:
+        if isinstance(x, list) and not isinstance(x, (str, bytes)):
+            yield from flatten_list(x)
+        else:
+            yield x
+
+
 def remove_sublist(main_list, unwanted_list):
     """
-    *#Remove items in sub-list from main list*
+    *# Remove items in sub-list from main list*
 
     ---
     ### Returns:
@@ -30,6 +106,7 @@ def remove_sublist(main_list, unwanted_list):
     ul= set(unwanted_list)
     res = [x for x in main_list if x not in ul]
     return res
+
 
 def check_sublist(main_list, sub_list, exception=0):
     """
@@ -53,6 +130,7 @@ def check_sublist(main_list, sub_list, exception=0):
     else:
         return False
 
+
 def list_2_pickle(src_list, fn):
     import pickle
 
@@ -64,6 +142,7 @@ def list_2_pickle(src_list, fn):
         print('\n ✔Successfully saved: 💾',fn)
     except:
         print(f'❌ ERROR saving list into {fn} file.')
+
 
 def pickle_2_list(fn):
     """
@@ -90,6 +169,7 @@ def pickle_2_list(fn):
     print(f'✔ Successfully read {fn} file.')
     return res
 
+
 def list_slice (list, chunks):
     """
     *#Slice list to smaller and equal pieces (exept the last chunk)*
@@ -106,6 +186,7 @@ def list_slice (list, chunks):
     """
     res = [list[x:x+chunks] for x in range(0, len(list), chunks)]
     return res
+
 
 def replace_many(text, dic):
     """
@@ -124,6 +205,7 @@ def replace_many(text, dic):
     for i, j in dic.items():
         text = text.replace(i, j)
     return text
+
 
 def fuzzy_compare_lists(source_list, match_list, limit_level, fast=0):
     """
@@ -181,6 +263,7 @@ def fuzzy_compare_lists(source_list, match_list, limit_level, fast=0):
 
     return report
 
+
 def list_2_str(source_list):
     """
     *#Transform list of items in string.*
@@ -196,6 +279,7 @@ def list_2_str(source_list):
     """
     res = str([i for i in source_list]).strip('[]')
     return res
+
 
 def num_2_str(data):
     """
@@ -217,7 +301,8 @@ def num_2_str(data):
 
 
 
-# Files
+# File functions
+#----------------------------------------------------------------
 
 def new_folder(folder, mode=0):
     """
