@@ -26,7 +26,7 @@ def transpose_list(list_in, na=None):
     ---
     ### Arguments:
     - list_in  list
-    - na       sunstitute for the empty positions
+    - na       substitute for the empty positions
     """
 
     # First I need to find maximum length of all sublists
