@@ -84,10 +84,6 @@ def df_merged_headers(cl, delimiter):
     return merged_headers
 
 def get_xlsx(fn, **kwargs):
-    # Read raw source data
-    # --------------------
-
-    #-----------------
     # Default values
     #-----------------
     sn = []
@@ -140,8 +136,8 @@ def get_xlsx(fn, **kwargs):
         if len(dest_pick)>1:
             res.to_pickle(dest_pick)
             print('Created:',dest_pick)
-
-    print('⚡⚡⚡ DONE ⚡⚡⚡')
+        else:
+            return res
 
 def from_excel_ordinal(ordinal, _epoch0=datetime(1899, 12, 31)):
     # Convert Excel date shown as serial number into a date string
