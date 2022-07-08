@@ -191,7 +191,7 @@ def df_append_2_xlsx(df, file_name, sheet_name):
     except:
         print(f'❌❌❌ Cannot open or write to file: {file_name}.\nIs it open ?')
 
-def df_2_xlsx(fn, df, sn, **kwargs):
+def df_2_xlsx(df, fn, sn, **kwargs):
     """
     *#Saves Dataframe(s) to worksheet(s) in Excel xlsx file.*
 
@@ -211,6 +211,7 @@ def df_2_xlsx(fn, df, sn, **kwargs):
     - a_table_style  (str)        Name of Excel table style
     - a_multi        (int)        0 = Single, 1 = Multi (if a_mode=1, dataframes and worksheets in arguments need to be in a list form)
     - a_properties   (dict)       custom file properties
+    - a_index        (boolean)    Print with index True or False
     """
 
     #-----------------
@@ -222,6 +223,7 @@ def df_2_xlsx(fn, df, sn, **kwargs):
     ac  = 1
     m   = 0
     s   = 0
+    ind = False
     ts  = 'Table Style Medium 2'
     wsp = {
             'author':   'IgorP',
@@ -245,6 +247,8 @@ def df_2_xlsx(fn, df, sn, **kwargs):
             m = v
         if k == 'a_properties':
             wsp = v
+        if k == 'a_index':
+            ind = v
 
     import xlsxwriter
     import pandas as pd
@@ -275,7 +279,7 @@ def df_2_xlsx(fn, df, sn, **kwargs):
         if 'DataFrame' in str(type(df)):
 
             # Create worksheet Data with data from dataframe
-            df.to_excel(writer, sheet_name=sn, index=False)
+            df.to_excel(writer, sheet_name=sn, index=ind)
 
             # Cosmetic - auto-fit columns
             #-----------------------------------------------
@@ -367,7 +371,6 @@ def df_2_xlsx(fn, df, sn, **kwargs):
         print('\n ✔Successfully saved: 💾',fn)
     except xlsxwriter.exceptions.FileCreateError:
         print('\n\nERROR!!!\nCannot write in opened file.\nCLOSE THE FILE, PLEASE!\n')
-
 
 def print_df(df, **kwargs):
     """
