@@ -79,6 +79,8 @@ du.print_df(res, vt=3)
 ### Result:
 Notice that first dataframe is printed as is, without cleaning, then for comparison, there is another print with cleaned dataframe.
 
+![screenshot_20220709-123026](https://user-images.githubusercontent.com/17882375/178103780-cd4df4ba-0731-415f-a9a1-5b859fa054eb.png)
+
 ![screenshot_20220709-122407](https://user-images.githubusercontent.com/17882375/178103601-c4d39e83-15a6-4f50-8113-90dfbbe24440.png)
 
 ### 💡 Example 2 - Connect to databases
