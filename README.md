@@ -79,7 +79,7 @@ du.print_df(res, vt=3)
 ### Result:
 Notice that first dataframe is printed as is, without cleaning, then for comparison, there is another print with cleaned dataframe.
 
-![screenshot_20220405-231858](https://user-images.githubusercontent.com/17882375/161851313-5fb66668-13f5-4cdd-b1e3-09da510b76d6.png)
+![screenshot_20220709-122407](https://user-images.githubusercontent.com/17882375/178103601-c4d39e83-15a6-4f50-8113-90dfbbe24440.png)
 
 ### 💡 Example 2 - Connect to databases
 In this example, I am going to establish a connection to 2 databases; one local and one remote (Heroku).
