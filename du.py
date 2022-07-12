@@ -3,7 +3,7 @@
 *#A collection of useful functions for optimized and faster work with DataFrame*
 
 ---
-👔 by Igor Perković
+👔 by Igor Perkovic
 
 🛠 CREATED: 2020-10-13 08:39:29
 📆 CHANGED: 2022-04-13 17:50:56
