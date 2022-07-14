@@ -87,6 +87,7 @@ def get_xlsx(fn, **kwargs):
     # Default values
     #-----------------
     sn = []
+    snc = ''
     nr = 0
     delimiter = '-'
     src_headers = 0
@@ -100,6 +101,8 @@ def get_xlsx(fn, **kwargs):
 
         if k == 'a_sn_list':
             sn  = v
+        if k == 'a_sn_col':
+            snc  = v
         if k == 'a_header_rows':
             nr = v
         if k == 'a_delimiter':
@@ -120,6 +123,7 @@ def get_xlsx(fn, **kwargs):
             print('Reading worksheet:',ws)
             print('headers: ', src_headers)
             df = xlsx.parse(ws, header=src_headers)
+            df[snc] = ws
             if nr > 1:
                 cl = df.columns.tolist()
                 df.columns = df_merged_headers(cl, delimiter)
@@ -132,6 +136,7 @@ def get_xlsx(fn, **kwargs):
         res.reset_index(drop=True, inplace=True)
         res.dropna(axis=1, how='all', inplace=True)
         res.dropna(axis=0, how='all', inplace=True)
+
 
         if len(dest_pick)>1:
             res.to_pickle(dest_pick)
