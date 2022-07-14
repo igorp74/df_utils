@@ -84,9 +84,27 @@ def df_merged_headers(cl, delimiter):
     return merged_headers
 
 def get_xlsx(fn, **kwargs):
+    """
+    *#Gets data from one file and multiple worksheets*
+
+    ---
+    ### Returns
+    → List of DataFrames - one DataFrame from each worksheet
+
+    ---
+    ### Arguments:
+    fn (Path)            *Existing xlsx file*
+
+    a_sn_list (list)     *List of desired sheet names*
+    a_sn_col  (str)      *Column name for column with worksheet names*
+    a_header_rows (int)  *Number of rows for handling multiple headers*
+    a_delimiter   (str)  *Delimiter for merged header names*
+    a_destination (Path) *Path and name of pickle file for saving the data localy*
+    """
+
     # Default values
     #-----------------
-    sn = []
+    sn = []     # sheet names
     snc = ''
     nr = 0
     delimiter = '-'
