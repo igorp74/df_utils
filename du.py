@@ -123,7 +123,8 @@ def get_xlsx(fn, **kwargs):
             print('Reading worksheet:',ws)
             print('headers: ', src_headers)
             df = xlsx.parse(ws, header=src_headers)
-            df[snc] = ws
+            if len(snc):
+                df[snc] = ws
             if nr > 1:
                 cl = df.columns.tolist()
                 df.columns = df_merged_headers(cl, delimiter)
