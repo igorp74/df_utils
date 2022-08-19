@@ -62,10 +62,24 @@ def df_2_sqlite(df, db_path, table_name):
 
 
 # Excel
-def get_xlsx_data(file, sheet):
+def get_xlsx_data(file, sheet=''):
+    """
+    # Simple wrapper over pd.read_excel function
+
+    # Returns
+    → DataFrame
+
+    # Arguments:
+    - file  (Path)
+    - sheet (Str) sheetname (optional) #  if left, first sheet would be used
+
+    """
     try:
         print('Getting the data from xlsx to DataFrame')
-        df   = pd.read_excel(file, sheet_name = sheet)
+        if len(sheet):
+            df = pd.read_excel(file, sheet_name = sheet)
+        else:
+            df = pd.read_excel(file)
         print('Successfully imported!\n')
         return df
     except:
