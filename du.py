@@ -22,6 +22,7 @@ from datetime import datetime, timedelta
 
 # Databases
 def df_2_mssqlsrv(df, engine_name, schema_name, table_name, ifexist):
+
     print('Inserting into database...')
 
     # Optimal chunk-size for SQL Server import
@@ -35,18 +36,19 @@ def df_2_mssqlsrv(df, engine_name, schema_name, table_name, ifexist):
 
 def df_2_sqlite(df, db_path, table_name):
     """
-    *#Create a SQLite database file from DataFrame*
+    ====================================
 
-    ---
-    ### Returns
-    → SQLite file (database)
+    🏷 Creates a SQLite database file from DataFrame
 
-    ---
-    ### Arguments:
+    📌 ARGUMENTS:
+    ―――――――――――――――――――――――――――――――――――――――――――――――――
     - df         (DataFrame)
     - db_path    (Path) Database name with path
     - table_name (str)  Table name
 
+    🎯 RETURNS
+    ―――――――――――――――――――――――――――――――――――――――――――――――――
+    → SQLite file (database)
     """
     from sqlalchemy import create_engine
 
@@ -99,21 +101,23 @@ def df_merged_headers(cl, delimiter):
 
 def get_xlsx(fn, **kwargs):
     """
-    *#Gets data from one file and multiple worksheets*
+    ==================================================
+    🏷 Gets data from one file and multiple worksheets
 
-    ---
-    ### Returns
+
+    📌ARGUMENTS
+    ――――――――――――――――――――――――――――――――――――――――――――――――――
+    fn (Path)            Existing xlsx file
+
+    a_sn_list (list)     List of desired sheet names
+    a_sn_col  (str)      Column name for column with worksheet names
+    a_header_rows (int)  Number of rows for handling multiple headers
+    a_delimiter   (str)  Delimiter for merged header names
+    a_destination (Path) Path and name of pickle file for saving the data localy
+
+    🎯 RETURNS
+    ――――――――――――――――――――――――――――――――――――――――――――――――――
     → List of DataFrames - one DataFrame from each worksheet
-
-    ---
-    ### Arguments:
-    fn (Path)            *Existing xlsx file*
-
-    a_sn_list (list)     *List of desired sheet names*
-    a_sn_col  (str)      *Column name for column with worksheet names*
-    a_header_rows (int)  *Number of rows for handling multiple headers*
-    a_delimiter   (str)  *Delimiter for merged header names*
-    a_destination (Path) *Path and name of pickle file for saving the data localy*
     """
 
     # Default values
@@ -183,22 +187,27 @@ def from_excel_ordinal(ordinal, _epoch0=datetime(1899, 12, 31)):
         ordinal -= 1  # Excel leap year bug, 1900 is not a leap year!
     return (_epoch0 + timedelta(days=ordinal)).replace(microsecond=0)
 
+
 def df_append_2_xlsx(df, file_name, sheet_name):
     """
-    *#Appends data from DataFrame to a new worksheet in existing file.*
+    =================================================
 
-    ### Prerequisites:
+    🏷Appends data from DataFrame to a new worksheet
+      in existing file.
+
+    ⚙ PREREQUISITES:
+    ―――――――――――――――――――――――――――――――――――――――――――――――――
     pip install openpyxl
 
-    ---
-    ### Returns
-    → File list
+    📌 ARGUMENTS:
+    ―――――――――――――――――――――――――――――――――――――――――――――――――
+    df         (DataFrame) your data
+    file_name  (Path)      Existing xlsx file
+    sheet_name (str)       Sheet Name for a new data
 
-    ---
-    ### Arguments:
-    df         (DataFrame) *your data*
-    file_name  (Path)      *Existing xlsx file*
-    sheet_name (str)       *Sheet Name for a new data*
+    🎯 RETURNS
+    ―――――――――――――――――――――――――――――――――――――――――――――――――
+    → File list
     """
 
     from openpyxl import load_workbook
@@ -229,27 +238,32 @@ def df_append_2_xlsx(df, file_name, sheet_name):
     except:
         print(f'❌❌❌ Cannot open or write to file: {file_name}.\nIs it open ?')
 
+
 def df_2_xlsx(df, fn, sn, **kwargs):
     """
-    *#Saves Dataframe(s) to worksheet(s) in Excel xlsx file.*
+    ===================================================================
 
-    ---
-    ### Returns:
-    → Single xlsx file with worksheet(s) from dataframe data
+    🏷 Saves Dataframe(s) to worksheet(s) in a single Excel xlsx file.
 
-    ---
-    ### Arguments:
-    - df             (DataFrame)
-    - fn             (Path(str))  File Name[s]
-    - sn             (str)        Sheet Name[s]
+    📌 ARGUMENTS:
+    ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+    - df             (DataFrame)  in multi mode [df1, df2, df3, ...]
+    - fn             (Path(str))  File Name
+    - sn             (str)        Sheet Name[s] in multi mode [sn1, sn2, sn3, ...]
+
     - a_tc           (hex color)  tab color
     - a_tab_colors   (hex color)  list of tab colors for every sheet
     - a_ac           (int)        0 = Off,    1 = On    (Auto-resize column)
     - a_style        (int)        0 = Header, 1 = Table
     - a_table_style  (str)        Name of Excel table style
-    - a_multi        (int)        0 = Single, 1 = Multi (if a_mode=1, dataframes and worksheets in arguments need to be in a list form)
+    - a_multi        (int)        0 = Single, 1 = Multi
     - a_properties   (dict)       custom file properties
     - a_index        (boolean)    Print with index True or False
+
+    🎯 RETURNS:
+    ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+    → Single xlsx file with worksheet(s)
+
     """
 
     #-----------------
@@ -410,20 +424,20 @@ def df_2_xlsx(df, fn, sn, **kwargs):
     except xlsxwriter.exceptions.FileCreateError:
         print('\n\nERROR!!!\nCannot write in opened file.\nCLOSE THE FILE, PLEASE!\n')
 
+
 def print_df(df, **kwargs):
     """
-    Prints a DataFrame.
+    ====================================
+    🏷 Prints a DataFrame.
 
-    ---
-    ### Returns:
+    🎯 RETURNS:
+    ――――――――――――――――――――――――――――――――――――
     → DataFrame information and values
 
-    ---
-    ### Arguments:
-
+    📌 ARGUMENTS:
+    ――――――――――――――――――――――――――――――――――――
     🏁 FLAGS:  1 = ON, 0 = OFF
 
-    ---
 
     df Dataframe         DataFrame
     d  DTypes            int
@@ -505,25 +519,26 @@ def print_df(df, **kwargs):
     if a_e:
         exit()
 
+
 def df_dtypes(df, mode):
     """
-    *#Prints particular DataFrame typ4es*
+    =====================================
 
-    ---
-    ### Returns
-    → Text data
+    🏷 Prints particular DataFrame types
 
-    ---
-    ### Arguments:
+    📌 ARGUMENTS:
+    ――――――――――――――――――――――――――――――――――――
     - df    (DataFrame)
     - mode  (int)
-    ```
-       0 = print
-       1 = NUM column list
-       2 = DAT column list
-       3 = TXT column list
-       4 = ALL columns list
-    ```
+        0 = print
+        1 = NUM column list
+        2 = DAT column list
+        3 = TXT column list
+        4 = ALL columns list
+
+    🎯 RETURNS:
+    ――――――――――――――――――――――――――――――――――――
+    → Text data
 
     """
 
@@ -567,6 +582,7 @@ def df_dtypes(df, mode):
             tmp.append([c,d])
         return tmp
 
+
 def split_df(df, lines = 1000):
     split_list = []
     num_chunks = len(df) // lines + 1
@@ -574,12 +590,14 @@ def split_df(df, lines = 1000):
         split_list.append(df[i*lines:(i+1)*lines])
     return split_list
 
+
 def df_unique(df, col, id=0):
     res = df.loc[:,col].drop_duplicates()
     res.reset_index(drop=True, inplace=True)
     if id:
         res['ID'] = res.index
     return res
+
 
 def clean_df(res, fillna=''):
     # Remove empty rows and columns
