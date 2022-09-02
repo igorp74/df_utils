@@ -64,24 +64,28 @@ def df_2_sqlite(df, db_path, table_name):
 
 
 # Excel
-def get_xlsx_data(file, sheet=''):
+def get_xlsx_data(fn, sn=''):
     """
-    # Simple wrapper over pd.read_excel function
+    ==============================================
 
-    # Returns
+    🏷 Simple wrapper over pd.read_excel function
+
+    📌 ARGUMENTS:
+    ――――――――――――――――――――――――――――――――――――――――――――――
+    - fn (Path) file  name
+    - sb (Str)  sheet name (optional) # if left, first sheet would be used
+
+    🎯 RETURNS
+    ――――――――――――――――――――――――――――――――――――――――――――――
     → DataFrame
-
-    # Arguments:
-    - file  (Path)
-    - sheet (Str) sheetname (optional) #  if left, first sheet would be used
-
     """
+
     try:
         print('Getting the data from xlsx to DataFrame')
-        if len(sheet):
-            df = pd.read_excel(file, sheet_name = sheet)
+        if len(sn):
+            df = pd.read_excel(fn, sheet_name = sn)
         else:
-            df = pd.read_excel(file)
+            df = pd.read_excel(fn)
         print('Successfully imported!\n')
         return df
     except:
@@ -430,14 +434,10 @@ def print_df(df, **kwargs):
     ====================================
     🏷 Prints a DataFrame.
 
-    🎯 RETURNS:
-    ――――――――――――――――――――――――――――――――――――
-    → DataFrame information and values
 
     📌 ARGUMENTS:
     ――――――――――――――――――――――――――――――――――――
     🏁 FLAGS:  1 = ON, 0 = OFF
-
 
     df Dataframe         DataFrame
     d  DTypes            int
@@ -445,8 +445,14 @@ def print_df(df, **kwargs):
     c  Columns           int
     v  Values            int
     vt Values tabular    int
+            1 = simple
+            2 = psql
+            3 = fancy_grid
     e  Exit after print  int
 
+    🎯 RETURNS:
+    ――――――――――――――――――――――――――――――――――――
+    → DataFrame information and values
     """
     #-----------------
     # Default values
@@ -584,8 +590,24 @@ def df_dtypes(df, mode):
 
 
 def split_df(df, lines = 1000):
+    """
+    ==================================================
+
+    🏷 Splits DataFrame to list of smaller DataFrames
+
+    📌 ARGUMENTS:
+    ―――――――――――――――――――――――――――――
+    - df (DataFrame)
+    - lines    (int) - maximum lines per dataframe
+
+    🎯 RETURNS
+    ―――――――――――――――――――――――――――――
+    → List of DataFrames
+    """
+
     split_list = []
     num_chunks = len(df) // lines + 1
+
     for i in range(num_chunks):
         split_list.append(df[i*lines:(i+1)*lines])
     return split_list
@@ -599,10 +621,24 @@ def df_unique(df, col, id=0):
     return res
 
 
-def clean_df(res, fillna=''):
+def clean_df(df, fillna=''):
+    """
+    ==================================
+
+    🏷 Cleans DataFrame
+
+    📌 ARGUMENTS:
+    ――――――――――――――――――――――――――――――――――
+    - df (DataFrame)
+    - fillna   (str)
+
+    🎯 RETURNS
+    ――――――――――――――――――――――――――――――――――
+    → Clean copy of original DataFrame
+    """
     # Remove empty rows and columns
-    res.dropna(how='all', axis=0, inplace=True)
-    res.dropna(how='all', axis=1, inplace=True)
+    res =  df.dropna(how='all', axis=0, inplace=False)
+    res = res.dropna(how='all', axis=1, inplace=True)
 
     # Strip leading and trailing spaces in column names
     res.columns = res.columns.str.strip()
