@@ -5,7 +5,7 @@
 👔 by Igor Perković
 
 🛠 CREATED: 2020-10-13 08:39:29
-📆 CHANGED: 2022-07-05 12:45:07
+📆 CHANGED: 2022-09-07 11:05:42
 
 ---
 ⚙ PREREQUISITES:
@@ -17,16 +17,18 @@
 #--------------------------------------------------
 def transpose_list(list_in, na=None):
     """
-    *# Transposing a list of list*
+    =============================
 
-    ---
-    ### Returns:
-    → Transposed list
+    🏷 Transposing a list of list
 
-    ---
-    ### Arguments:
+    📌 ARGUMENTS:
+    ―――――――――――――――――――――――――――――
     - list_in  list
     - na       substitute for the empty positions
+
+    🎯 RETURNS
+    ―――――――――――――――――――――――――――――
+    → Transposed list
     """
 
     # First I need to find maximum length of all sublists
@@ -45,16 +47,18 @@ def transpose_list(list_in, na=None):
 
 def rotate_list(l,n):
     """
-    *# Rotate list*
+    =============================
 
-    ---
-    ### Returns:
-    → Rotated list
+    🏷 Rotate a list
 
-    ---
-    ### Arguments:
+    📌 ARGUMENTS:
+    ―――――――――――――――――――――――――――――
     - l  list
     - n  number of positions for rotating to the righ
+
+    🎯 RETURNS
+    ―――――――――――――――――――――――――――――
+    → Rotated list
     """
 
     return [l[(i + n) % len(l)] for i, x in enumerate(l)]
@@ -62,25 +66,25 @@ def rotate_list(l,n):
 
 def flatten_list(in_list):
     """
-    *# Flatten any embedded list*
+    =============================
 
-    ---
-    ### Returns:
+    🏷 Flatten any embedded list
+
+    📌 ARGUMENTS:
+    ―――――――――――――――――――――――――――――
+    - in_list    list for flattening
+
+    🎯 RETURNS
+    ―――――――――――――――――――――――――――――
     → Flatten list generator object
 
-    ---
-    ### ATTENTION:
-    - For getting result in another list,
-    need to iterate over generator
+    # ATTENTION:
+    For getting result in another list,
+    we need to iterate over generator
     or print object.
 
-    ---
-    ### EXAMPLE:
-    - res_list = list(flatten(some_list))
-
-    ---
-    ### Arguments:
-    - in_list    list for flattening
+    # EXAMPLE:
+    res_list = list(flatten(some_list))
     """
 
     for x in in_list:
@@ -90,38 +94,42 @@ def flatten_list(in_list):
             yield x
 
 
-def remove_sublist(main_list, unwanted_list):
+def remove_sublist(ml, ul) -> list:
     """
-    *# Remove items in sub-list from main list*
+    ==================================================
 
-    ---
-    ### Returns:
+    🏷 Remove items from main list
+
+    📌 ARGUMENTS:
+    ―――――――――――――――――――――――――――――――――――――――――――――――――――
+    - ml (list)  main_list from which I want to remove..
+    - ul (list)  unwanted list istems
+
+    🎯 RETURNS
+    ―――――――――――――――――――――――――――――――――――――――――――――――――――
     → Reduced main list
-
-    ---
-    ### Arguments:
-    - main_list    list from which I want to remove..
-    - sub_list     ..this istems.
     """
-    ul= set(unwanted_list)
-    res = [x for x in main_list if x not in ul]
-    return res
+
+    return [x for x in ml if x not in ul]
 
 
-def check_sublist(main_list, sub_list, exception=0):
+def check_sublist(main_list, sub_list, exception=0) -> bool:
     """
-    *#Check if list conatins a whole or partial sublist*
+    =============================
 
-    ---
-    ### Returns:
-    → True or False
+    🏷 Check if list conatins a whole or partial sublist
 
-    ---
-    ### Arguments:
+    📌 ARGUMENTS:
+    ―――――――――――――――――――――――――――――
     - main_list    list in which I try to find..
     - sub_list     ..this sub-list
-    - exception=0  with exception of n items. #Default is 0 which means all items of sub-list should be in main list to get True as a result.
+    - exception=0  with exception of n items. # Default is 0 which means all items of sub-list should be in main list to get True as a result.
+
+    🎯 RETURNS
+    ―――――――――――――――――――――――――――――
+    → True or False
     """
+
     sl = set(sub_list)
     res = [x for x in main_list if x in sl]
 
@@ -132,6 +140,21 @@ def check_sublist(main_list, sub_list, exception=0):
 
 
 def list_2_pickle(src_list, fn):
+    """
+    ===============================================
+
+    🏷 Converting and saving list to a pickle file
+
+    📌 ARGUMENTS:
+    ―――――――――――――――――――――――――――――
+    - src_list (list)  Source list
+    - fn       (Path)  File name
+
+    🎯 RETURNS
+    ―――――――――――――――――――――――――――――
+    → Saved file and message
+    """
+
     import pickle
 
     print(f'Storing list into: 💾 {fn}')
@@ -144,21 +167,24 @@ def list_2_pickle(src_list, fn):
         print(f'❌ ERROR saving list into {fn} file.')
 
 
-def pickle_2_list(fn):
+def pickle_2_list(fn) -> list:
     """
-    *#Read serialized list from pickle to list*
+    ============================================
 
-    ---
-    ### Returns
-    → list
+    🏷 Read serialized list from pickle to list
 
-    ---
-    ### Arguments:
+    📌 ARGUMENTS:
+    ――――――――――――――――――――――――――――――――――――――――――――
     - fn (Path) file name
+
+    🎯 RETURNS
+    ――――――――――――――――――――――――――――――――――――――――――――
+    → list
 
     """
 
     import pickle
+
     res = []
     with (open(fn, 'rb')) as pickle_file:
         while True:
@@ -167,41 +193,46 @@ def pickle_2_list(fn):
             except EOFError:
                 break
     print(f'✔ Successfully read {fn} file.')
+
     return res
 
 
 def list_slice (list, chunks):
     """
-    *#Slice list to smaller and equal pieces (exept the last chunk)*
+    =================================================================
 
-    ---
-    ### Returns
-    → Nested list of sliced sublist of equal size
+    🏷 Slice list to smaller and equal pieces (exept the last chunk)
 
-    ---
-    ### Arguments:
+    📌 ARGUMENTS:
+    ―――――――――――――――――――――――――――――
     - list   (list) source list
     - chunks (int)  desired number of items in sublist
 
+    🎯 RETURNS
+    ―――――――――――――――――――――――――――――
+    → Nested list of sliced sublist of equal size
     """
+
     res = [list[x:x+chunks] for x in range(0, len(list), chunks)]
     return res
 
 
 def replace_many(text, dic):
     """
-    *#Multiple replacement in given text from replacement dictionary*
+    ==================================================================
 
-    ---
-    ### Returns
-    → New text
+    🏷 Multiple replacement in given text from replacement dictionary
 
-    ---
-    ### Arguments:
+    📌 ARGUMENTS:
+    ―――――――――――――――――――――――――――――
     - text (str)        Text which will be changed
     - dic  (dictionary) Replace dictionary
 
+    🎯 RETURNS
+    ―――――――――――――――――――――――――――――
+    → New text
     """
+
     for i, j in dic.items():
         text = text.replace(i, j)
     return text
@@ -209,24 +240,26 @@ def replace_many(text, dic):
 
 def fuzzy_compare_lists(source_list, match_list, limit_level, fast=0):
     """
-    *#Compare 2 lists using RapidFuzz library with Levenstein algorithm.*
+    =============================
 
-    ---
-    ### Prerequisites:
-    pip install rapidfuzz
+    🏷 Compare 2 lists using RapidFuzz library with Levenstein algorithm.
 
-    ---
-    ### Returns:
-    → DataFrame
+    ⚙ Prerequisites:
+    pip install rapidfuzz pandas
 
-    ---
-    ### Arguments:
+    📌 ARGUMENTS:
+    ―――――――――――――――――――――――――――――
     - source_list (list[str])   Items that we will comapre
     - match_list  (list[str])   ...with items from this list
     - limit_level (int)         and use n best scores
     - fast        (int)         scorer is fuzz.QRatio
 
+    🎯 RETURNS
+    ―――――――――――――――――――――――――――――
+    → DataFrame
     """
+
+
     import pandas as pd
     from rapidfuzz import process, fuzz
 
@@ -266,38 +299,20 @@ def fuzzy_compare_lists(source_list, match_list, limit_level, fast=0):
 
 def list_2_str(source_list):
     """
-    *#Transform list of items in string.*
+    =============================
 
-    ---
-    ### Returns:
-    → String
+    🏷 Transform list of items in string
 
-    ---
-    ### Arguments:
+    📌 ARGUMENTS:
+    ―――――――――――――――――――――――――――――
     - source_list (list[str])
 
+    🎯 RETURNS
+    ―――――――――――――――――――――――――――――
+    → String
     """
     res = str([i for i in source_list]).strip('[]')
     return res
-
-
-def num_2_str(data):
-    """
-    *#Transform tuple of numeric items in tuple of strings.*
-
-    ---
-    ### Returns:
-    → tuple of strings
-
-    ---
-    ### Arguments:
-    - data (tuple[int])
-
-    """
-    acc = []
-    for d in data:
-        acc.append(str(d))
-    return tuple(acc)
 
 
 
@@ -306,18 +321,20 @@ def num_2_str(data):
 
 def new_folder(folder, mode=0):
     """
-    *#Creates a new folder*
+    ===========================
 
-    ---
-    ### Returns:
-    → New folder
+    🏷 Creates a new folder
 
-    ---
-    ### Arguments:
+    📌 ARGUMENTS:
+    ―――――――――――――――――――――――――――――――――――――――――――――
     - folder (Path)
     - mode   (int)  0 = Silent, 1 = With messages
 
+    🎯 RETURNS
+    ―――――――――――――――――――――――――――――――――――――――――――――
+    → New folder
     """
+
     try:
         folder.mkdir(parents=True, exist_ok=False)
     except FileExistsError:
@@ -331,22 +348,25 @@ def new_folder(folder, mode=0):
         else:
             pass
 
+
 def get_file_list(path, extension, mode=0):
     """
-    *#Gets the file list from given path.*
+    =============================
 
-    ---
-    ### Returns
+    🏷 Gets the file list from given path.
+
+    📌 ARGUMENTS:
+    ―――――――――――――――――――――――――――――
+    path      (Path) Windows path to the source files
+    extension (str)  File extension (.doc, .xlsx, ...) with wildcards
+    mode      (int)  0 = full path
+                     1 = File names only
+
+    🎯 RETURNS
+    ―――――――――――――――――――――――――――――
     → File list
-
-    ---
-    ### Arguments:
-    path      (Path) *Windows path to the source files*
-    extension (str)  *File extension (.doc, .xlsx, ...) with wildcards*
-    mode      (int)  *0 = full path
-                     1 = File names only*
-
     """
+
     file_list  = []
 
     for f in path.glob(f'{extension}'):
@@ -357,20 +377,22 @@ def get_file_list(path, extension, mode=0):
 
     return file_list
 
+
 def split_by_size(path, file_list, size):
     """
-    *#Split file list into smaller lists of wanted overall size.*
+    =============================
 
-    ---
-    ### Returns:
-    → a list with splitted sublists
+    🏷 Split file list into smaller lists of wanted overall size.
 
-    ---
-    ### Arguments:
+    📌 ARGUMENTS:
+    ―――――――――――――――――――――――――――――
     - path      (Path)
     - file_list (list[str])
     - size      (int)       Desired size
 
+    🎯 RETURNS
+    ―――――――――――――――――――――――――――――
+    → a list with splitted sublists
     """
 
     from pathlib import Path
@@ -400,19 +422,21 @@ def split_by_size(path, file_list, size):
 
     return global_list
 
+
 def cp_multi_2_one(file_list, dst_path):
     """
-    *#Copy files from many different folders to one destination folder.*
+    =============================
 
-    ---
-    ### Returns:
-    → All files in one folder
+    🏷 Copy files from many different folders to one destination folder.
 
-    ---
-    ### Arguments:
+    📌 ARGUMENTS:
+    ―――――――――――――――――――――――――――――
     - file_list (list[str])
     - dst_path  (Path)      Destination path
 
+    🎯 RETURNS
+    ―――――――――――――――――――――――――――――
+    → All files in one folder
     """
 
     import shutil
