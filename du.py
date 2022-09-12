@@ -22,7 +22,27 @@ from datetime import datetime, timedelta
 
 # Databases
 def df_2_mssqlsrv(df, engine_name, schema_name, table_name, ifexist):
+    """
+    ====================================
 
+    🏷 Creates or append table in MS SQL Server database
+        from DataFrame data
+
+    📌 ARGUMENTS:
+    ―――――――――――――――――――――――――――――――――――――――――――――――――
+    - df           (DataFrame)
+    - engine_name  (SQLAlchemy engine)
+    - schema_name  (SQL Server schema name)
+    - table_name   (str) Table name
+    - ifexist      (str) fail    = just throw an error and stop
+                         replace = replace existing table with a new data
+                         append  = apeend to existing table
+
+
+    🎯 RETURNS
+    ―――――――――――――――――――――――――――――――――――――――――――――――――
+    → SQL Server table data
+    """
     print('Inserting into database...')
 
     # Optimal chunk-size for SQL Server import
