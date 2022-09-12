@@ -111,6 +111,7 @@ def get_xlsx_data(fn, sn=''):
     except:
         print('Oh, no! Data Import ERROR!')
 
+
 def df_merged_headers(cl, delimiter):
     merged_headers = []
     for c in cl:
@@ -122,6 +123,7 @@ def df_merged_headers(cl, delimiter):
                 tmp.append(str(i).replace('\n','').strip().upper())
         merged_headers.append(delimiter.join(tmp[0: len(tmp)]))
     return merged_headers
+
 
 def get_xlsx(fn, **kwargs):
     """
@@ -204,6 +206,7 @@ def get_xlsx(fn, **kwargs):
             print('Created:',dest_pick)
         else:
             return res
+
 
 def from_excel_ordinal(ordinal, _epoch0=datetime(1899, 12, 31)):
     # Convert Excel date shown as serial number into a date string
