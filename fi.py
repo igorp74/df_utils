@@ -297,24 +297,6 @@ def fuzzy_compare_lists(source_list, match_list, limit_level, fast=0):
     return report
 
 
-def list_2_str(source_list):
-    """
-    =============================
-
-    🏷 Transform list of items in string
-
-    📌 ARGUMENTS:
-    ―――――――――――――――――――――――――――――
-    - source_list (list[str])
-
-    🎯 RETURNS
-    ―――――――――――――――――――――――――――――
-    → String
-    """
-    res = str([i for i in source_list]).strip('[]')
-    return res
-
-
 
 # File functions
 #----------------------------------------------------------------
