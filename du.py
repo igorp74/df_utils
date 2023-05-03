@@ -320,14 +320,13 @@ def df_2_xlsx(df, fn, sn, **kwargs):
     - fn             (Path(str))  File Name
     - sn             (str)        Sheet Name[s] in multi mode [sn1, sn2, sn3, ...]
 
-    - a_tc           (hex color)  tab color
-    - a_tab_colors   (hex color)  list of tab colors for every sheet
-    - a_ac           (int)        0 = Off,    1 = On    (Auto-resize column)
-    - a_style        (int)        0 = Header, 1 = Table
-    - a_table_style  (str)        Name of Excel table style
-    - a_multi        (int)        0 = Single, 1 = Multi
-    - a_properties   (dict)       custom file properties
-    - a_index        (boolean)    Print with index True or False
+    - tab_color    (hex color)  tab color
+    - tab_colors   [hex colors] list of tab colors for every sheet
+    - ac           (int)        0 = Off,    1 = On    (Auto-resize column)
+    - style        (int)        0 = Header, 1 = Table
+    - table_style  (str)        Name of Excel table style
+    - properties   (dict)       custom file properties
+    - index_on     (boolean)    Print with index True or False
 
     🎯 RETURNS:
     ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
