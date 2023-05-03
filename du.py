@@ -353,19 +353,19 @@ def df_2_xlsx(df, fn, sn, **kwargs):
 
     # Get dynamic argument
     for k,v in kwargs.items():
-        if k == 'a_tc':
+        if k == 'tab_color':
             tc = v
-        if k == 'a_tab_colors':
+        if k == 'tab_colors':
             tcl = v
-        if k == 'a_ac':
+        if k == 'ac':
             ac = v
-        if k == 'a_style':
+        if k == 'style':
             s = v
-        if k == 'a_table_style':
+        if k == 'table_style':
             ts = v
-        if k == 'a_properties':
+        if k == 'properties':
             wsp = v
-        if k == 'a_index':
+        if k == 'index_on':
             ind = v
 
     import xlsxwriter
@@ -433,7 +433,7 @@ def df_2_xlsx(df, fn, sn, **kwargs):
                 ws.set_zoom(80)
 
         else:
-            print('List of DataFrames | WorkSheets are not of the same size.')
+            print('List of DataFrames and WorkSheets are not of the same size.')
             print('Exiting...')
             exit()
     # If not, check if the single DataFrame is actually a DataFrame type
