@@ -521,6 +521,7 @@ def print_df(df, **kwargs):
     a_v  = 1
     a_vt = 0
     a_e  = 1
+    tf   = 0
 
     # Get dynamic argument
     for k,v in kwargs.items():
@@ -570,9 +571,12 @@ def print_df(df, **kwargs):
     if a_vt:
         from tabulate import tabulate
         if a_vt == 1:
-            print(tabulate(df,headers=df.columns.tolist(),  tablefmt='simple',showindex=False),'\n')
+            tf='simple'
         elif a_vt == 2:
-            print(tabulate(df,headers=df.columns.tolist(),  tablefmt='psql',showindex=False),'\n')
+            tf='psql'
+        elif a_vt == 2:
+            tf='rounded_outline' # setx PYTHONIOENCODING="utf_8"
+        print(tabulate(df, headers=df.columns.tolist(), tablefmt=tf ,showindex=False),'\n')
 
     if a_v:
         print('\n')
