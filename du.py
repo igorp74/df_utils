@@ -307,7 +307,6 @@ def df_2_xlsx_append(df, fn, sn, **kwargs):
     from openpyxl import load_workbook
     from openpyxl.utils.dataframe import dataframe_to_rows
     from openpyxl.styles import Font,PatternFill
-    import numpy as np
 
     wb = load_workbook(fn)
     ws = wb.create_sheet(sn)
@@ -401,7 +400,6 @@ def df_2_xlsx(df, fn, sn, **kwargs):
             ind = v
 
     import xlsxwriter
-    import pandas as pd
 
     def get_col_widths(dataframe):
         idx_max = max([len(str(s)) for s in dataframe.index.values] + [len(str(dataframe.index.name))])
