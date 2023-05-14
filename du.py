@@ -151,7 +151,7 @@ def get_xlsx(fn, **kwargs):
 
     xlsx = pd.ExcelFile(fn)
     sheets = xlsx.sheet_names
-    print(sheets)
+    print(f'Reading data from: {fn}\nFound work sheets: {sheets}\n')
 
     # Default values
     #-----------------
@@ -166,7 +166,6 @@ def get_xlsx(fn, **kwargs):
     c = 0 # clean
     con = 0 # concatenate
     dest_pick = Path('')
-
 
     # Get dynamic argument
     for k,v in kwargs.items():
@@ -203,9 +202,13 @@ def get_xlsx(fn, **kwargs):
     else:
         work_sheets = sheets
 
+    if collect:
+        print('Collecting DataFrames to a list is ON\n')
+
     for ws in work_sheets:
         print('Reading worksheet:',ws)
-        print('Headers: ', src_headers)
+        if src_headers:
+            print('Headers:', src_headers)
 
         df = xlsx.parse(ws, header=src_headers)
 
@@ -224,7 +227,6 @@ def get_xlsx(fn, **kwargs):
 
         # Collect DataFrames into dataframe list
         if collect:
-            print('Appending in general list...')
             dfs.append(df)
 
         # Save worksheets to pickle files
@@ -232,16 +234,18 @@ def get_xlsx(fn, **kwargs):
             tmp_fn = fn.stem + '_' + ws + '.pickle'
             tmp_pn = dest_pick / tmp_fn
             df.to_pickle(tmp_pn)
-            print('Created:', tmp_pn)
+            print(f'Created: {tmp_pn}\n')
 
     if collect:
         if con:
+            print('\nConcatenating collected dataframes...')
             res = pd.concat(dfs)
             res.columns = res.columns.str.replace('\n', '')
             if p:
                 tmp_fn = fn.stem + '_unified.pickle'
                 tmp_pn = dest_pick / tmp_fn
                 df.to_pickle(tmp_pn)
+                print(f'\nCreated {tmp_fn}\n')
             else:
                 return res
         else:
@@ -257,56 +261,85 @@ def from_excel_ordinal(ordinal, _epoch0=datetime(1899, 12, 31)):
     return (_epoch0 + timedelta(days=ordinal)).replace(microsecond=0)
 
 
-def df_append_2_xlsx(df, file_name, sheet_name):
+def df_2_xlsx_append(df, fn, sn, **kwargs):
     """
     =================================================
 
-    🏷Appends data from DataFrame to a new worksheet
+    🏷 Appends data from DataFrame to a new worksheet
       in existing file.
 
     ⚙ PREREQUISITES:
     ―――――――――――――――――――――――――――――――――――――――――――――――――
-    pip install openpyxl
+    pip install pandas openpyxl
 
     📌 ARGUMENTS:
     ―――――――――――――――――――――――――――――――――――――――――――――――――
-    df         (DataFrame) your data
-    file_name  (Path)      Existing xlsx file
-    sheet_name (str)       Sheet Name for a new data
+    df  (DataFrame) your data
+    fn  (Path)      Existing xlsx file
+    sn  (str)       Sheet Name for a new data
 
     🎯 RETURNS
     ―――――――――――――――――――――――――――――――――――――――――――――――――
     → File list
     """
 
+    #-----------------
+    # Default values
+    #-----------------
+    ind = False
+
+    # Get dynamic argument
+    for k,v in kwargs.items():
+        if k == 'index_on':
+            ind = v
+
+    # Alternative method - faster, shorter but no styling
+    #------------------------------------------------------
+    # with pd.ExcelWriter(fn, mode='a', engine='openpyxl', if_sheet_exists='overlay') as writer:
+    # 
+    #     if 'list' in str(type(df)):
+    #         cr=0
+    #         for d in df:
+    #             d.to_excel(writer, sheet_name=sn, startrow=cr, index=ind)
+    #             cr += d.shape[0]+2
+
+    print(f'\nAppending data into file: {fn} | worksheet: {sn}\n')
     from openpyxl import load_workbook
     from openpyxl.utils.dataframe import dataframe_to_rows
     from openpyxl.styles import Font,PatternFill
+    import numpy as np
 
+    wb = load_workbook(fn)
+    ws = wb.create_sheet(sn)
+
+    # Header row style
+    fg_style = Font(color='00FFD966', bold=True)
+    bg_style = PatternFill("solid", start_color="000d0d0d")
+
+    if 'list' in str(type(df)):
+        rc = 1 # row counter
+        for d in df:
+            for r in dataframe_to_rows(d, index=ind, header=True):
+                ws.append(r)
+
+                for y in range(1, d.shape[1]+1):
+                    ws.cell(row=rc, column=y).font = fg_style
+                    ws.cell(row=rc, column=y).fill = bg_style
+
+            ws.append([np.nan])
+            rc += d.shape[0]+2
+    else:
+        for r in dataframe_to_rows(df, index=ind, header=True):
+            ws.append(r)
+
+            for y in range(1, df.shape[1]+1):
+                ws.cell(row=1, column=y).font = fg_style
+                ws.cell(row=1, column=y).fill = bg_style
     try:
-        wb = load_workbook(file_name)
-        writer = pd.ExcelWriter(file_name, engine='openpyxl')
-        writer.book = wb
-        new_sheet = wb.create_sheet(title=sheet_name)
-
-        # Freeze 1st row
-        for r in dataframe_to_rows(df, index=False, header=True):
-            new_sheet.append(r)
-        new_sheet.freeze_panes = 'A2'
-
-        # Header row style
-        fg_style = Font(color='00FFD966', bold=True)
-        bg_style = PatternFill("solid", start_color="000d0d0d")
-
-        for y in range(1, new_sheet.max_column+1):
-            new_sheet.cell(row=1, column=y).font = fg_style
-            new_sheet.cell(row=1, column=y).fill = bg_style
-
-        writer.save()
-        print(f'Successfully append sheet: {sheet_name}\n   to file: {file_name}')
+        wb.save(fn)
+        print('Successfully append ✅\n')
     except:
-        print(f'Cannot open or write to file: {file_name}.\nIs it open ?')
-
+        print('ERROR appending\n')
 
 def df_2_xlsx(df, fn, sn, **kwargs):
     """
@@ -401,7 +434,7 @@ def df_2_xlsx(df, fn, sn, **kwargs):
                 if d.empty:
                     pass
                 else:
-                    d.to_excel(writer, sheet_name=s, index=False)
+                    d.to_excel(writer, sheet_name=s, index=ind)
 
                     ws = writer.sheets[s]
                     for i, width in enumerate(get_col_widths(d)):
