@@ -6,7 +6,7 @@
 👔 by Igor Perkovic
 
 🛠 CREATED: 2020-10-13 08:39:29
-📆 CHANGED: 2023-05-14 23:35:52
+📆 CHANGED: 2023-05-16 17:13:11
 
 ---
 ⚙ PREREQUISITES:
@@ -282,17 +282,6 @@ def df_2_xlsx_append(df, fn, sn, **kwargs):
     ―――――――――――――――――――――――――――――――――――――――――――――――――
     → File list
     """
-
-    #-----------------
-    # Default values
-    #-----------------
-    ind = False
-
-    # Get dynamic argument
-    for k,v in kwargs.items():
-        if k == 'index_on':
-            ind = v
-
     # Alternative method - faster, shorter but no styling
     #------------------------------------------------------
     # with pd.ExcelWriter(fn, mode='a', engine='openpyxl', if_sheet_exists='overlay') as writer:
@@ -303,6 +292,20 @@ def df_2_xlsx_append(df, fn, sn, **kwargs):
     #             d.to_excel(writer, sheet_name=sn, startrow=cr, index=ind)
     #             cr += d.shape[0]+2
 
+    nrows = 2
+    ton = 0
+    t = []
+    if 'list' in str(type(df)):
+        t = [np.nan]*len(df)
+    # Get dynamic argument
+    for k,v in kwargs.items():
+        if k == 'rows':
+            nrows = v
+        if k == 'tl':
+            t = v
+        if k == 'titles':
+            ton = v
+
     print(f'\nAppending data into file: {fn} | worksheet: {sn}\n')
     from openpyxl import load_workbook
     from openpyxl.utils.dataframe import dataframe_to_rows
@@ -312,23 +315,30 @@ def df_2_xlsx_append(df, fn, sn, **kwargs):
     ws = wb.create_sheet(sn)
 
     # Header row style
-    fg_style = Font(color='00FFD966', bold=True)
+    fg_style = Font(size=9, bold=True, color='00FFD966')
     bg_style = PatternFill("solid", start_color="000d0d0d")
 
     if 'list' in str(type(df)):
         rc = 1 # row counter
-        for d in df:
-            for r in dataframe_to_rows(d, index=ind, header=True):
-                ws.append(r)
+        if len(df) == len(t):
+            for d,t in zip(df,t):
+                if ton:
+                    ws.append([t])
+                    ws.cell(row=rc, column=1).font = Font(size=14, bold=True)
+                    rc+=1
+                for r in dataframe_to_rows(d, index=False, header=True):
+                    ws.append(r)
 
-                for y in range(1, d.shape[1]+1):
-                    ws.cell(row=rc, column=y).font = fg_style
-                    ws.cell(row=rc, column=y).fill = bg_style
+                    for y in range(1, d.shape[1]+1):
+                        ws.cell(row=rc, column=y).font = fg_style
+                        ws.cell(row=rc, column=y).fill = bg_style
 
-            ws.append([np.nan])
-            rc += d.shape[0]+2
+                ws.append([np.nan])
+                rc += d.shape[0]+nrows
+        else:
+            print('ERROR - DataFrame & Titles mismatch')
     else:
-        for r in dataframe_to_rows(df, index=ind, header=True):
+        for r in dataframe_to_rows(df, index=False, header=True):
             ws.append(r)
 
             for y in range(1, df.shape[1]+1):
@@ -336,7 +346,7 @@ def df_2_xlsx_append(df, fn, sn, **kwargs):
                 ws.cell(row=1, column=y).fill = bg_style
     try:
         wb.save(fn)
-        print('Successfully append ✅\n')
+        print('✅ Successfully append\n')
     except:
         print('ERROR appending\n')
 
@@ -514,7 +524,7 @@ def df_2_xlsx(df, fn, sn, **kwargs):
 
     try:
         writer._save()
-        print('\nSuccessfully saved: ',fn)
+        print('\n✅ Successfully saved: ',fn)
     except xlsxwriter.exceptions.FileCreateError:
         print('\n\nERROR!!!\nCannot write in opened file.\nCLOSE THE FILE, PLEASE!\n')
 
@@ -605,7 +615,7 @@ def print_df(df, **kwargs):
             tf='simple'
         elif a_vt == 2:
             tf='psql'
-        elif a_vt == 2:
+        elif a_vt == 3:
             tf='rounded_outline' # setx PYTHONIOENCODING="utf_8"
         print(tabulate(df, headers=df.columns.tolist(), tablefmt=tf ,showindex=False),'\n')
 
