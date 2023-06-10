@@ -19,6 +19,7 @@ import numpy as np
 import pandas as pd
 
 
+
 # Databases
 def df_2_mssqlsrv(df, engine_name, schema_name, table_name, ifexist):
     """
@@ -99,17 +100,34 @@ def get_xlsx_data(fn, sn=''):
     → DataFrame
     """
 
-    try:
-        print('Getting the data from xlsx to DataFrame')
-        if len(sn):
-            df = pd.read_excel(fn, sheet_name = sn)
-        else:
-            df = pd.read_excel(fn)
-        print('Successfully imported!\n')
-        return df
-    except:
-        print('Oh, no! Data Import ERROR!')
 
+    print(f'\nTrying to read the data from {fn} to DataFrame')
+    try:
+        if fn.is_file():
+            print(f'Found file: {fn.name} on provided path')
+            xlsx = pd.ExcelFile(fn)
+            sheets = xlsx.sheet_names
+
+            if len(sn):
+                if sn in sheets:
+                    df = pd.read_excel(fn, sheet_name = sn)
+                    print('Data successfully read!\n')
+                    return df
+                else:
+                    print(f'ERROR: Sheet name does not exist. Choose one of these: {sheets}')
+            else:
+                print(f"Reading first worksheet [{sheets[0]}]")
+                df = pd.read_excel(fn)
+                print('Data successfully read!\n')
+                return df
+
+        else:
+            print('ERROR (get_xlsx_data): File not found!')
+            raise Exception
+
+    except:
+        print(f'FAILED to read file {fn}\n')
+        return
 
 def df_merged_headers(cl, delimiter):
     merged_headers = []
@@ -548,6 +566,7 @@ def print_df(df, **kwargs):
             1 = simple
             2 = psql
     e  Exit after print  int
+    ee Exit on error     int
 
     🎯 RETURNS:
     ――――――――――――――――――――――――――――――――――――
@@ -561,7 +580,8 @@ def print_df(df, **kwargs):
     a_c  = 1
     a_v  = 1
     a_vt = 0
-    a_e  = 1
+    a_e  = 0
+    a_ee = 1
     tf   = 0
 
     # Get dynamic argument
@@ -579,6 +599,8 @@ def print_df(df, **kwargs):
             a_vt  = v
         if k == 'e':
             a_e  = v
+        if k == 'ee':
+            a_ee = v
 
         if a_d==1 and a_dt==1:
             a_d  = 0
@@ -586,45 +608,55 @@ def print_df(df, **kwargs):
         if a_v==1 and a_vt>=1:
             a_v = 0
 
+    try:
+        if df is not None:
 
-    print('\nDATAFRAME INFO | Rows:', df.shape[0], 'Columns:', df.shape[1])
+            print('\nDATAFRAME INFO | Rows:', df.shape[0], 'Columns:', df.shape[1])
 
-    if a_c:
-        print('Columns:',df.columns.tolist(),'\n')
+            if a_c:
+                print('Columns:',df.columns.tolist(),'\n')
 
-    if a_d:
-        print (df.dtypes,'\n')
+            if a_d:
+                print (df.dtypes,'\n')
 
-    if a_dt:
-        from tabulate import tabulate
+            if a_dt:
+                from tabulate import tabulate
 
-        acc = []
-        dtypes  = df.dtypes.tolist()
-        columns = df.columns.tolist()
+                acc = []
+                dtypes  = df.dtypes.tolist()
+                columns = df.columns.tolist()
 
-        for c,d in zip(columns, dtypes):
-            acc.append([c,d])
+                for c,d in zip(columns, dtypes):
+                    acc.append([c,d])
 
-        dfd = pd.DataFrame(acc, columns=['Column', 'Dtype'])
+                dfd = pd.DataFrame(acc, columns=['Column', 'Dtype'])
 
-        print(tabulate(dfd,headers=dfd.columns,  tablefmt='psql',showindex=False),'\n')
+                print(tabulate(dfd,headers=dfd.columns,  tablefmt='psql',showindex=False),'\n')
 
-    if a_vt:
-        from tabulate import tabulate
-        if a_vt == 1:
-            tf='simple'
-        elif a_vt == 2:
-            tf='psql'
-        elif a_vt == 3:
-            tf='rounded_outline' # setx PYTHONIOENCODING="utf_8"
-        print(tabulate(df, headers=df.columns.tolist(), tablefmt=tf ,showindex=False),'\n')
+            if a_vt:
+                from tabulate import tabulate
+                if a_vt == 1:
+                    tf='simple'
+                elif a_vt == 2:
+                    tf='psql'
+                elif a_vt == 3:
+                    tf='rounded_outline' # setx PYTHONIOENCODING="utf_8"
+                print(tabulate(df, headers=df.columns.tolist(), tablefmt=tf ,showindex=False),'\n')
 
-    if a_v:
-        print('\n')
-        for v in df.values.tolist():
-            print(v)
-    if a_e:
-        exit()
+            if a_v:
+                print('\n')
+                for v in df.values.tolist():
+                    print(v)
+            if a_e:
+                exit()
+        else:
+            print('ERROR (print_df): There is no data assigned to provided DataFrame')
+            raise Exception
+    except:
+        print('FAILED to print DataFrame')
+        if a_ee:
+            print('Exiting...')
+            exit()
 
 
 def df_dtypes(df, mode):
