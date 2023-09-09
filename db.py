@@ -1,6 +1,6 @@
 """
 ## DATAFRAME UTILS
-*#A collection of useful functions for work with database connectors*
+   A collection of useful functions for work with database connectors
 
 👔 by Igor Perković
 
