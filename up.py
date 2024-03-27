@@ -22,7 +22,7 @@ In the second part, Decryption, this scripts reads keys and hashes from
 the database and decrypt previously encrypted text.
 
 """
-
+import urllib
 import sqlite3 as sq
 from cryptography.fernet import Fernet
 
@@ -101,7 +101,7 @@ def get_password(conn, in_row):
 
     # Check original password
     real_password = str(decrypted_pass,'utf-8')
-    return real_password
+    return urllib.parse.quote_plus(real_password)
 
     conn.commit()
     c.close()

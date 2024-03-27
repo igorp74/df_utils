@@ -6,7 +6,7 @@
 👔 by Igor Perkovic
 
 🛠 CREATED: 2020-10-13 08:39:29
-📆 CHANGED: 2023-05-16 17:13:11
+📆 CHANGED: 2024-03-27 21:00:06
 
 ---
 ⚙ PREREQUISITES:
@@ -303,7 +303,7 @@ def df_2_xlsx_append(df, fn, sn, **kwargs):
     # Alternative method - faster, shorter but no styling
     #------------------------------------------------------
     # with pd.ExcelWriter(fn, mode='a', engine='openpyxl', if_sheet_exists='overlay') as writer:
-    # 
+    #
     #     if 'list' in str(type(df)):
     #         cr=0
     #         for d in df:
@@ -401,7 +401,7 @@ def df_2_xlsx(df, fn, sn, **kwargs):
     if 'list' in str(type(df)):
         tcl = [tc]*len(df)
     ac  = 1
-    s   = 0
+    ss  = 0
     ind = False
     ts  = 'Table Style Medium 2'
     wsp = {
@@ -419,7 +419,7 @@ def df_2_xlsx(df, fn, sn, **kwargs):
         if k == 'ac':
             ac = v
         if k == 'style':
-            s = v
+            ss = v
         if k == 'table_style':
             ts = v
         if k == 'properties':
@@ -454,7 +454,7 @@ def df_2_xlsx(df, fn, sn, **kwargs):
     # Check if list of DataFrames is passed in argument
     if 'list' in str(type(df)):
         if len(df) == len(sn):
-            for d,s, tagc in zip(df, sn, tcl):
+            for d,s,tagc in zip(df, sn, tcl):
 
                 # Skip empty worksheets
                 if d.empty:
@@ -466,7 +466,7 @@ def df_2_xlsx(df, fn, sn, **kwargs):
                     for i, width in enumerate(get_col_widths(d)):
                         ws.set_column(i-1, i-1, width+2)
 
-                    if s:
+                    if ss:
                         # Table style format
                         #--------------------
                         cols = []
@@ -509,9 +509,9 @@ def df_2_xlsx(df, fn, sn, **kwargs):
                 for i, width in enumerate(get_col_widths(df)):
                     ws.set_column(i-1, i-1, width+2)
 
-            # Style
+            # Style Sheet for Table
             #------------------------------------
-            if s:
+            if ss:
                 # Table style format
                 #--------------------
                 cols = []
