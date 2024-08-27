@@ -549,27 +549,29 @@ def df_2_xlsx(df, fn, sn, **kwargs):
 
 def print_df(df, **kwargs):
     """
-    ====================================
     🏷 Prints a DataFrame.
 
-
     📌 ARGUMENTS:
-    ――――――――――――――――――――――――――――――――――――
+    ---
+
+    |Flag|Description|Type|
+    |:--:|:--:|--:|
+    |df|Dataframe| DataFrame|
+    |d|DTypes| int|
+    |c|Columns| int|
+    |v|Values| int|
+    |e|Exit after print|int|
+    |ee|Exit on error|int|
+    |dt| DTypes tabular|int|
+    |vt|Values tabular|int|
+    |  | 1 = simple||
+    |  | 2 = psql  ||
+
     🏁 FLAGS:  1 = ON, 0 = OFF
 
-    df Dataframe         DataFrame
-    d  DTypes            int
-    dt DTypes tabular    int
-    c  Columns           int
-    v  Values            int
-    vt Values tabular    int
-            1 = simple
-            2 = psql
-    e  Exit after print  int
-    ee Exit on error     int
 
     🎯 RETURNS:
-    ――――――――――――――――――――――――――――――――――――
+    ---
     → DataFrame information and values
     """
     #-----------------
